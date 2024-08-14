@@ -1,20 +1,23 @@
-# Use an official PHP image with Apache
-FROM php:7.4-apache
+# Base image
+FROM php:8.3.10-apache
 
-# Set the working directory in the container
-WORKDIR /var/www/html
-
-# Copy the current directory contents into the container
-COPY . /var/www/html
-
-# Enable Apache mod_rewrite
+# Enable mod_rewrite for Apache
 RUN a2enmod rewrite
 
-# Install necessary PHP extensions
+# Set the working directory
+WORKDIR /var/www/html
+
+# Copy the CodeIgniter files to the container
+COPY ./codeigniter /var/www/html
+
+# Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql
 
-# Set file permissions
+# Set permissions
 RUN chown -R www-data:www-data /var/www/html
 
-# Expose port 80 for the web server
+# Expose port 80
 EXPOSE 80
+
+# Start Apache server
+CMD ["apache2-foreground"]
