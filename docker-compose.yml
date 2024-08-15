@@ -3,6 +3,7 @@ version: '3.8'
 services:
   app:
     build: .
+    container_name: codeigniter
     ports:
       - "8010:80"
     volumes:
@@ -15,14 +16,28 @@ services:
     container_name: codeigniter_db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: codeigniter_db
-      MYSQL_USER: ci_user
-      MYSQL_PASSWORD: ci_pass
-      MYSQL_ROOT_PASSWORD: root_pass
+      MYSQL_DATABASE: training
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rpassword
     ports:
       - "3310:3306"
     volumes:
       - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: codeigniter_phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_USER: user
+      PMA_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rpassword
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
 
 volumes:
   db_data:

@@ -11,10 +11,15 @@ WORKDIR /var/www/html
 COPY ./codeigniter /var/www/html
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql
+RUN apt-get update && \
+    apt-get install -y libicu-dev && \
+    docker-php-ext-install pdo pdo_mysql intl mysqli
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html
+
+# Copy custom php.ini configuration file
+COPY php.ini /usr/local/etc/php/
 
 # Expose port 80
 EXPOSE 80
